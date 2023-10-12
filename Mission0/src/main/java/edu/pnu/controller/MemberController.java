@@ -27,6 +27,30 @@ import edu.pnu.domain.MemberVO;
 public class MemberController {
 	List<MemberVO> list;
 
+	public MemberController() {
+		list = new ArrayList<>();
+		for (int i = 1; i < 5; i++) {
+			MemberVO m = new MemberVO();
+			m.setId(i);
+			m.setName("name" + i);
+			m.setPass("pass" + i);
+			m.setRegidate(new Date());
+			list.add(m);
+		
+			//빌더 이용한 생성
+			/*
+			list.add(MemberVO.builder()
+								.id(i)
+								.name("name"+i)
+								.pass("pass"+i)
+								.rigidate(new Date())
+								.build());
+			*/
+		}
+		
+		
+	}
+	
 	private MemberVO findMember(int id) {
 		for (MemberVO m : list)
 			if (m.getId() == id)
@@ -43,17 +67,6 @@ public class MemberController {
 		return maxid + 1;
 	}
 
-	public MemberController() {
-		list = new ArrayList<>();
-		for (int i = 1; i < 5; i++) {
-			MemberVO m = new MemberVO();
-			m.setId(i);
-			m.setName("name" + i);
-			m.setPass("pass" + i);
-			m.setRegidate(new Date());
-			list.add(m);
-		}
-	}
 
 	@GetMapping("/member")
 	public List<MemberVO> getMembers() {
