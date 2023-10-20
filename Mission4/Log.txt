@@ -1,0 +1,5 @@
+removeMember, delete member where id =12, Fri Oct 20 10:06:24 KST 2023, false
+getMembers, select * from member, Fri Oct 20 10:06:26 KST 2023, true
+getMember, select * from member where id=1, Fri Oct 20 10:06:29 KST 2023, true
+getMember, list getMember(7), Fri Oct 20 11:01:03 KST 2023, false
+getMembers, list getMembers, Fri Oct 20 11:01:04 KST 2023, true
