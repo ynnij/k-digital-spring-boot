@@ -22,7 +22,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	//List<Board> findByTitleContaining(String searchKeyword, Pageable paging);
 	Page<Board> findByTitleContaining(String searchKeyword, Pageable paging);
 	
-	
 	/* 쿼리 어노테이션 */
 	@Query("select b from Board b where b.title like %?1% order by b.seq desc") //대소문자 구분 주의!! Board 클래스 앞에 대문자
 	List<Board> queryAnnotationTest1(String searchKeyword);
@@ -61,4 +60,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	
 	//title에 10이 포함되거나 content에 2가 포함되는 데이터를 seq 내림차순으로 출력
 	List<Board> findByTitleContainingOrContentContainingOrderBySeqDesc(String keyword1, String keyword2);
+	
+	
 }
