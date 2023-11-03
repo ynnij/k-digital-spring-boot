@@ -32,7 +32,12 @@ public class BoardController {
 		return "getBoardList"; //Controller는 이 리턴값을 view의 이름으로 판단
 	}
 	
-	@PostMapping("/insertBoard")
+	@GetMapping("/insertBoard") //insert 화면을 띄워주기 위해 필요
+	public String insertBoardView() {
+		return "insertBoard";
+	}
+
+	@PostMapping("/insertBoard") //내용을 저장하고 리다이렉트를 위해 필요
 	public String insertBoard(Board board) {
 		boardService.insertBoard(board);
 		return "redirect:getBoardList";
@@ -47,12 +52,12 @@ public class BoardController {
 	@PostMapping("/updateBoard")
 	public String updateBoard(Board board) {
 		boardService.updateBoard(board);
-		return "update success";
+		return "forward:getBoardList";
 	}
 	
 	@GetMapping("/deleteBoard")
 	public String deleteBoard(Board board) {
 		boardService.deleteBoard(board);
-		return "delete success";
+		return "forward:getBoardList";
 	}
 }

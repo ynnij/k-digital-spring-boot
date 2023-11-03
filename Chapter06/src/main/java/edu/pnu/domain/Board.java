@@ -32,6 +32,6 @@ public class Board {
 	private Date createDate;
 	
 	//@Column(insertable=false, updatable=false, columnDefinition="number default 0")
-	@Column(insertable=false, updatable=false)
+	@Column(insertable=false)
 	private Long cnt;
 }
