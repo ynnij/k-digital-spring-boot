@@ -28,10 +28,9 @@ public class Board {
 	private String content;
 	
 	//@Column(insertable=false, updatable=false, columnDefinition="date default curdate()")
-	@Column(insertable=false, updatable=false)
+	@Column(updatable=false)
 	private Date createDate;
 	
 	//@Column(insertable=false, updatable=false, columnDefinition="number default 0")
-	@Column(insertable=false)
 	private Long cnt;
 }
