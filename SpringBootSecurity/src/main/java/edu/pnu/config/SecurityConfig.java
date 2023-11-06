@@ -1,5 +1,8 @@
 package edu.pnu.config;
 
+import javax.sql.DataSource;
+
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +15,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration //이 클래스가 설정 클래스라고 정의(IoC 컨테이너에 로드)
 @EnableWebSecurity //스프링 시큐리티 적용에 필요한 객체들 자동 생성
 public class SecurityConfig {
+	
+	@Autowired
+	private DataSource dataSource;
+	
 	@Bean //이 메서드가 리턴하는 객체를 IoC 컨테이너에 등록
 	SecurityFilterChain filterCchain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(security->security
@@ -37,19 +44,32 @@ public class SecurityConfig {
 		return http.build();
 	}
 	
+//	@Autowired
+//	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.inMemoryAuthentication()
+//		.withUser("manager")
+//		.password("{noop}abcd")
+//		.roles("MANAGER");
+//		
+//		auth.inMemoryAuthentication()
+//		.withUser("admin")
+//		.password("{noop}abcd")
+//		.roles("ADMIN");
+//		
+//	}
+	
+	//JDBC를 이용해서 로그인하는 예제
 	@Autowired
 	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("manager")
-		.password("{noop}abcd")
-		.roles("MANAGER");
-		
-		auth.inMemoryAuthentication()
-		.withUser("admin")
-		.password("{noop}abcd")
-		.roles("ADMIN");
-		
+		auth.jdbcAuthentication()
+			.dataSource(dataSource)
+			// 입력한 아이디로 사용자 정보를 조회
+			.usersByUsernameQuery("select username, concat('{noop}', password) password, "
+					+ "enable from member where username=?")
+			// 입력한 아이디로 사용자 권한 정보를 조회
+			.authoritiesByUsernameQuery("select username, role from member where username=?");
 	}
+	
 	
 	
 }
