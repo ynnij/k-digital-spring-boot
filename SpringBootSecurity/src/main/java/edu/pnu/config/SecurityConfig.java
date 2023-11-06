@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -16,8 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity //스프링 시큐리티 적용에 필요한 객체들 자동 생성
 public class SecurityConfig {
 	
-	@Autowired
-	private DataSource dataSource;
+//	@Autowired
+//	private DataSource dataSource;
 	
 	@Bean //이 메서드가 리턴하는 객체를 IoC 컨테이너에 등록
 	SecurityFilterChain filterCchain(HttpSecurity http) throws Exception {
@@ -58,18 +60,26 @@ public class SecurityConfig {
 //		
 //	}
 	
+	
 	//JDBC를 이용해서 로그인하는 예제
-	@Autowired
-	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
-			.dataSource(dataSource)
-			// 입력한 아이디로 사용자 정보를 조회
-			.usersByUsernameQuery("select username, concat('{noop}', password) password, "
-					+ "enable from member where username=?")
-			// 입력한 아이디로 사용자 권한 정보를 조회
-			.authoritiesByUsernameQuery("select username, role from member where username=?");
+//	@Autowired
+//	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.jdbcAuthentication()
+//			.dataSource(dataSource)
+//			// 입력한 아이디로 사용자 정보를 조회
+//			.usersByUsernameQuery("select username, concat('{noop}', password) password, "
+//					+ "enable from member where username=?")
+//			// 입력한 아이디로 사용자 권한 정보를 조회
+//			.authoritiesByUsernameQuery("select username, role from member where username=?");
+//	}
+	
+	
+	//암호화 (두 가지 방법이 있지만 둘 중 하나만 사용해야한다.)
+	@Bean 
+	PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+		//return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
 	}
-	
-	
 	
 }
