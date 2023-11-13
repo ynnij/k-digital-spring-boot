@@ -3,6 +3,7 @@ package edu.pnu.board.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,24 +21,20 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	/*
 	@RequestMapping("/getBoardList")
-	public String getBoardList(Model model, Board board) {
-		Page<Board> boardList = boardService.getBoardList(board);
-		model.addAttribute("boardList",boardList);
-		return "board/getBoardList";
-	}
-	*/
-	
-	@RequestMapping("/getBoardList")
-	public String getBoardList(Model model, Search search) {
+	public String getBoardList(Model model, Search search, @AuthenticationPrincipal OAuth2User principal) {
 		if(search.getSearchCondition()==null) search.setSearchCondition("TITLE");
 		if(search.getSearchKeyword()==null) search.setSearchKeyword("");
+
+		String name = principal.getAttribute("name");
 		
 		Page<Board> boardList = boardService.getBoardList(search);
 		model.addAttribute("boardList",boardList);
+		model.addAttribute("name",name); //이름 추가
+		
 		return "board/getBoardList";
 	}
+	
 	
 	@GetMapping("/getBoard")
 	public String getBoard(Board board, Model model) {
@@ -47,6 +44,7 @@ public class BoardController {
 
 	@GetMapping("/insertBoard")
 	public String insertBoardView() {
+
 		return "board/insertBoard";
 	}
 	

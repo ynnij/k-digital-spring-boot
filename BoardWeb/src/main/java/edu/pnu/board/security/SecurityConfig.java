@@ -15,6 +15,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig{
 	@Autowired
 	private SecurityUserDetailsService userDetailsService;
+	@Autowired
+	private BoardOAuth2UserDetailsService oauthService;
 	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
@@ -29,6 +31,12 @@ public class SecurityConfig{
 		
 		security.formLogin(frmLogin->frmLogin.loginPage("/system/login")
 						.defaultSuccessUrl("/board/getBoardList",true));
+		
+		security.oauth2Login(oauth2->{
+			oauth2.loginPage("/login")
+				.userInfoEndpoint(uend->uend.userService(oauthService))
+				.defaultSuccessUrl("/board/getBoardList",true);
+		});
 		
 		security.exceptionHandling(ex->ex.accessDeniedPage("/system/accessDenied"));
 		
